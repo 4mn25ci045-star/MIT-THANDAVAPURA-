@@ -27,21 +27,26 @@ jobs:
           java-version: "21"
 
       - name: Extract project ZIP
+        shell: bash
         run: |
           mkdir -p extracted
           unzip -q mit-transit-gps-platform.zip -d extracted
-          find extracted -maxdepth 5 -name package.json
-          PROJECT_DIR="$(dirname "$(find extracted -maxdepth 5 -name package.json -print -quit)")"
-          test -n "$PROJECT_DIR"
+          PROJECT_DIR="$(dirname "$(find extracted -name package.json -not -path '*/node_modules/*' -print -quit)")"
+          if [ -z "$PROJECT_DIR" ] || [ "$PROJECT_DIR" = "extracted" ]; then
+            echo "ERROR: Could not find the app package.json in the ZIP."
+            find extracted -maxdepth 4 -type f | head -80
+            exit 1
+          fi
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "Project folder: $PROJECT_DIR"
 
       - name: Install dependencies
-        run: npm install --package-lock=false --legacy-peer-deps --no-audit --no-fund
-        working-directory: extracted/mit-transit-gps-platform
+        run: npm install --legacy-peer-deps --no-audit --no-fund
+        working-directory: ${{ env.PROJECT_DIR }}
 
       - name: Build web app
         run: npm run build
-        working-directory: extracted/mit-transit-gps-platform
+        working-directory: ${{ env.PROJECT_DIR }}
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -49,19 +54,24 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
-      - name: Sync Capacitor
-        run: npx cap sync android
-        working-directory: extracted/mit-transit-gps-platform
+      - name: Prepare Android project
+        shell: bash
+        run: |
+          if [ ! -d android ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+        working-directory: ${{ env.PROJECT_DIR }}
 
-      - name: Build APK
+      - name: Build debug APK
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
-        working-directory: extracted/mit-transit-gps-platform/android
+        working-directory: ${{ env.PROJECT_DIR }}/android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: MIT-Thandavapura-APK
-          path: extracted/mit-transit-gps-platform/android/app/build/outputs/apk/debug/app-debug.apk
+          path: ${{ env.PROJECT_DIR }}/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
