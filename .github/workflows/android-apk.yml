@@ -1,7 +1,7 @@
 
 name: Build MIT Thandavapura APK
 
-on:
+"on":
   workflow_dispatch:
 
 permissions:
@@ -28,14 +28,15 @@ jobs:
 
       - name: Extract project ZIP
         run: |
+          mkdir -p extracted
           unzip -q mit-transit-gps-platform.zip -d extracted
-          echo "Checking project files..."
-          find extracted -maxdepth 4 -name package.json
-          test -f extracted/mit-transit-gps-platform/package.json
+          find extracted -maxdepth 5 -name package.json
+          PROJECT_DIR="$(dirname "$(find extracted -maxdepth 5 -name package.json -print -quit)")"
+          test -n "$PROJECT_DIR"
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
 
       - name: Install dependencies
-        run: |
-          npm install --package-lock=false --legacy-peer-deps --no-audit --no-fund
+        run: npm install --package-lock=false --legacy-peer-deps --no-audit --no-fund
         working-directory: extracted/mit-transit-gps-platform
 
       - name: Build web app
@@ -45,15 +46,14 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android SDK
-        run: |
-          sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
       - name: Sync Capacitor
         run: npx cap sync android
         working-directory: extracted/mit-transit-gps-platform
 
-      - name: Build debug APK
+      - name: Build APK
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
