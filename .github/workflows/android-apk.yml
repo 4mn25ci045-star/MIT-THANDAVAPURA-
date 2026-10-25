@@ -15,48 +15,50 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "21"
 
-      - name: Download project ZIP
+      - name: Extract project ZIP
         run: |
-          curl -fL \
-            https://raw.githubusercontent.com/4mn25ci045-star/MIT-THANDAVAPURA-/main/mit-transit-gps-platform.zip \
-            -o project.zip
+          unzip -q mit-transit-gps-platform.zip -d extracted
+          find extracted -maxdepth 4 -name package.json
 
-      - name: Extract project
-        run: |
-          unzip -q project.zip
-          cd mit-transit-gps-platform
-          npm ci
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+        working-directory: extracted/mit-transit-gps-platform
 
       - name: Build web app
-        run: |
-          cd mit-transit-gps-platform
-          npm run build
+        run: npm run build
+        working-directory: extracted/mit-transit-gps-platform
 
-      - name: Prepare Android SDK
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
       - name: Sync Capacitor
-        run: |
-          cd mit-transit-gps-platform
-          npx cap sync android
+        run: npx cap sync android
+        working-directory: extracted/mit-transit-gps-platform
 
       - name: Build debug APK
         run: |
-          cd mit-transit-gps-platform/android
           chmod +x gradlew
           ./gradlew assembleDebug
+        working-directory: extracted/mit-transit-gps-platform/android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: MIT-Thandavapura-APK
-          path: mit-transit-gps-platform/android/app/build/outputs/apk/debug/app-debug.apk
+          path: extracted/mit-transit-gps-platform/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+run-name: 
