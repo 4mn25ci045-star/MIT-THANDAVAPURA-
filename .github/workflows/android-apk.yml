@@ -32,8 +32,8 @@ jobs:
           find extracted -maxdepth 4 -name package.json
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-        working-directory: extracted/mit-transit-gps-platform
+        run: |
+  npm install --package-lock=false --legacy-peer-deps --no-audit --no-fund
 
       - name: Build web app
         run: npm run build
