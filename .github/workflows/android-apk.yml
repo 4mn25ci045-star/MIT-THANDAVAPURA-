@@ -61,4 +61,3 @@ jobs:
           name: MIT-Thandavapura-APK
           path: extracted/mit-transit-gps-platform/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-run-name: 
