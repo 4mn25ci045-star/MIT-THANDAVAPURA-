@@ -32,7 +32,9 @@ jobs:
 
       - name: Install dependencies
         working-directory: mit-transit-gps-platform
-        run: npm ci
+        run: |
+          npm cache clean --force
+          npm ci --no-audit --no-fund
 
       - name: Build web app
         working-directory: mit-transit-gps-platform
