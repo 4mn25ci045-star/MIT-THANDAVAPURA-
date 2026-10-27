@@ -1,0 +1,15 @@
+# MIT Thandavapura tracking
+- [ ] Inspect existing app and correct functional errors without recreating it.
+- [ ] Add working college updates, timetable and issue reporting with authorized access.
+- [ ] Add a student-safe, explicitly approved live tracking view and reliable search.
+- [ ] Prepare Capacitor Android scaffold and document authorized GPS integration and remaining setup.
+- [ ] Verify new features and existing tests.
+- [x] Build orange/black college identity, animated opening, Travel and Security screens.
+- [x] Configure Google authentication, approved personnel rules and profiles.
+- [ ] Activate phone verification (requires SMS provider configuration).
+- [ ] Populate approved personnel and designate administrator (requires college accounts).
+- [x] Implement hashed administrator login, attempt protection, IMEI mapping and password change.
+- [x] Implement actual-data route selection, GPS updates and stop alerts.
+- [ ] Complete verification (10 unit tests passed; authenticated administration and map live behavior untested).
+- [ ] Connect live GPS provider and real route data (requires college feed details).
+- [ ] Connect driver voice-message delivery (requires driver service/account details).

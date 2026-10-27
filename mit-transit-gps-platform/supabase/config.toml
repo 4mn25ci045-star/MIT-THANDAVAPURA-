@@ -1,0 +1,3 @@
+project_id = "qzccpyohajvkoalwwohg"
+[functions.gps-integration]
+verify_jwt = true

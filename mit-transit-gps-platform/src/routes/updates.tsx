@@ -1,0 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router';
+import { CollegeShell } from '@/components/college-shell';
+import { CampusAccess, CampusQueryState, useCampusData } from '@/components/campus-access';
+import { campusHead } from '@/lib/campus';
+export const Route=createFileRoute('/updates')({head:()=>campusHead('College updates','Official MIT Thandavapura college transport announcements.'),component:Updates});
+function Updates(){const access=useCampusData();return <CollegeShell tab="updates"><div className="page-heading"><div><div className="eyebrow">College notices</div><h1>College updates<span className="text-primary">.</span></h1></div></div><CampusAccess access={access}>{!access.query.data?<CampusQueryState query={access.query}/>:access.query.data.updates.length?<div className="campus-list">{access.query.data.updates.map(n=><article className="notice-item" key={n.id}><time className="text-xs text-muted-foreground">{new Date(n.published_at).toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'})}</time><h2>{n.title}</h2><p className="whitespace-pre-wrap">{n.body}</p></article>)}</div>:<section className="campus-empty"><h2>No published updates</h2><p>Official college notices will appear here when published.</p></section>}</CampusAccess></CollegeShell>;}

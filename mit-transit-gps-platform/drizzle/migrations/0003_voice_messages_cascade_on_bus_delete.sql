@@ -1,0 +1,2 @@
+ALTER TABLE public.voice_messages DROP CONSTRAINT voice_messages_route_id_fkey;
+ALTER TABLE public.voice_messages ADD CONSTRAINT voice_messages_route_id_fkey FOREIGN KEY (route_id) REFERENCES public.bus_routes(id) ON DELETE CASCADE;

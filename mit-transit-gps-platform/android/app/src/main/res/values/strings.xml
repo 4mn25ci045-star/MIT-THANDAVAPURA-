@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MIT Thandavapura</string>
+    <string name="title_activity_main">MIT Thandavapura</string>
+    <string name="package_name">in.mitthandavapura.bustracker</string>
+    <string name="custom_url_scheme">in.mitthandavapura.bustracker</string>
+</resources>

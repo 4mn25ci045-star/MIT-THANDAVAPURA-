@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791651174011,
+      "tag": "0000_college_transport",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791651263278,
+      "tag": "0001_voice_storage_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791678921311,
+      "tag": "0002_bus_routes_unique_imei",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791916590667,
+      "tag": "0003_voice_messages_cascade_on_bus_delete",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792901665194,
+      "tag": "0004_campus_services_and_student_tracking",
+      "breakpoints": true
+    }
+  ]
+}
