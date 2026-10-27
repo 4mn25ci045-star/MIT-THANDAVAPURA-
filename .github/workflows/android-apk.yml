@@ -1,3 +1,8 @@
+q
+
+
+
+
 name: Build MIT Thandavapura APK
 
 on:
@@ -29,6 +34,9 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
 
       - name: Install dependencies
         working-directory: mit-transit-gps-platform
